@@ -1,8 +1,11 @@
 import json
+import os
 
 import anthropic
 
 client = anthropic.Anthropic()
+
+MODEL = os.environ.get("MODEL", "claude-haiku-4-5-20251001")
 
 tools = [
     {
@@ -45,7 +48,7 @@ messages = [
 ]
 
 response = client.messages.create(
-    model="claude-opus-4-6",
+    model=MODEL,
     max_tokens=1024,
     tools=tools,
     tool_choice={"type": "auto", "disable_parallel_tool_use": True},
@@ -75,7 +78,7 @@ while response.stop_reason == "tool_use":
     )
 
     response = client.messages.create(
-        model="claude-opus-4-6",
+        model=MODEL,
         max_tokens=1024,
         tools=tools,
         tool_choice={"type": "auto", "disable_parallel_tool_use": True},

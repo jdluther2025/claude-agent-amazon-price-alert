@@ -1,9 +1,12 @@
 import json
+import os
 
 import anthropic
 from anthropic import beta_tool
 
 client = anthropic.Anthropic()
+
+MODEL = os.environ.get("MODEL", "claude-haiku-4-5-20251001")
 
 
 # @beta_tool infers the schema from type hints and the docstring —
@@ -41,7 +44,7 @@ def get_price_history(url: str) -> str:
 # tool_runner handles the agentic loop — no while loop, no manual
 # stop_reason checking, no appending messages by hand
 final_message = client.beta.messages.tool_runner(
-    model="claude-opus-4-6",
+    model=MODEL,
     max_tokens=1024,
     tools=[fetch_product_price, get_price_history],
     messages=[
